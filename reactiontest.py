@@ -27,6 +27,7 @@ class ReactionTest(BotModule):
         self.message_returns.append(message_return)
         client.add_reaction(message_return, ":rewind:")
         client.add_reaction(message_return, ":fast_forward:")
+        # TODO: change the addition of reactions into a loop
 
     # Now we hand off to the reaction command
 
@@ -38,6 +39,8 @@ class ReactionTest(BotModule):
         if type(reaction.emoji) is not str:
             react_text = reaction.emoji.name
         if react_text == ":rewind:" or react_text == ":fast_forward:":
+        # TODO: differentiate between different react_texts
             embed = discord.Embed(title="Reaction based scrolling demo", color=0x000000)
             embed.add_field(name="Two", value="General Kenobi!", inline=True)
+            # TODO: be able to dynamically change what is edited
             client.edit_message(reaction.message, embed=embed)
