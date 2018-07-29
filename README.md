@@ -1,2 +1,2 @@
-# reaction-testing
-reaction based scrolling test
+# scroll-reaction
+Reaction based scrolling.
