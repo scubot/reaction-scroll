@@ -22,12 +22,12 @@ class Scrollable():
         # You may want to override this default behaviour to suit your table's needs.
         # The resulting embeds will be created with the order than the list is returned in.
         # Should return a 2-dimensional list of [title, data].
-        self.processed_data = [[x[field], 'Testing'] for x in self.table]
+        return [[x[field], 'Testing'] for x in self.table]
 
-    def refresh(self, *, field):
+    def refresh(self, field):
         self.processed_data.clear()
         self.embeds.clear()
-        self.preprocess(field=field)
+        self.processed_data = self.preprocess(field=field)
         counter = 1
         page = 1
         for item in self.processed_data:
