@@ -28,6 +28,9 @@ class Scrollable():
         self.processed_data.clear()
         self.embeds.clear()
         self.processed_data = self.preprocess(field=field)
+        self.create_embeds()
+
+    def create_embeds(self):
         counter = 1
         page = 1
         for item in self.processed_data:
