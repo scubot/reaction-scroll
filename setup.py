@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="reaction-scroll",
-    version="0.0.1.dev",
+    version="0.0.1.dev0",
     author="Scubot Team",
     description="Scrollable Embeds for Discord bots",
     long_description=long_description,
