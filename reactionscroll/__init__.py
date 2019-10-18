@@ -81,14 +81,48 @@ class ScrollViewBuilder:
         self.bot = bot
         self.views = []
 
-    def create_with(self, ctx: commands.Context, data: List[Mapping[Any, Any]],
+    async def create_with(self, ctx: commands.Context, data: List[Mapping[Any, Any]],
                     **kwargs) -> ScrollView:
         """Creates a ScrollView for the given data."""
-        embeds = list()
+        embeds = ScrollViewBuilder._create_embeds(data)
+        message = ctx.send(embed=embeds[0])
+        await message.add_reaction("⏪")
+        await message.add_reaction("⏩")
+
+        self.views.append(uuid.uuid4())
+        view = ScrollView(self.bot, embeds, message, id_=self.views[-1])
+        self.bot.add_cog(view)
+
+        return view
+
+    async def create_on_message(self, message, data: List[Mapping[Any, Any]],
+                          **kwargs) -> ScrollView:
+        """Creates a ScrollView associated with a message that already exists."""
+        embeds = ScrollViewBuilder._create_embeds(data)
+        message.edit(embed=embeds[0])
+        await message.add_reaction("⏪")
+        await message.add_reaction("⏩")
+
+        self.views.append(uuid.uuid4())
+        view = ScrollView(self.bot, embeds, message, id_=self.views[-1])
+        self.bot.add_cog(view)
+
+        return view
+
+
+    def clear(self):
+        """Stop monitoring all current ScrollViews."""
+        for cog in self.views:
+            self.bot.remove_cog(str(cog))
+        self.views = []
+
+    @staticmethod
+    def _create_embeds(data: List[Mapping[Any, Any]], **kwargs) -> List[discord.Embed]:
         title = kwargs.get('title', self.title)
         key_str = kwargs.get('key_str', None)
         value_str = kwargs.get('value_str', None)
 
+        embeds = list()
         for page in data:
             embed = discord.Embed(
                 title=title,
@@ -99,17 +133,3 @@ class ScrollViewBuilder:
                 value = value_str(value) if value_str else str(value)
                 embed.add_field(name=key, value=value)
             embeds.append(embed)
-
-        message = ctx.send(embed=embeds[0])
-
-        self.views.append(uuid.uuid4())
-        view = ScrollView(self.bot, embeds, message, id_=self.views[-1])
-        self.bot.add_cog(view)
-
-        return view
-
-    def clear(self):
-        """Stop monitoring all current ScrollViews."""
-        for cog in self.views:
-            self.bot.remove_cog(str(cog))
-        self.views = []
