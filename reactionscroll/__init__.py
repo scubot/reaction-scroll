@@ -109,7 +109,6 @@ class ScrollViewBuilder:
 
         return view
 
-
     def clear(self):
         """Stop monitoring all current ScrollViews."""
         for cog in self.views:
