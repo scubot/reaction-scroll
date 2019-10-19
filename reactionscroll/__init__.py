@@ -98,7 +98,7 @@ class ScrollViewBuilder:
     async def create_on_message(self, message, data: List[Mapping[Any, Any]],
                           **kwargs) -> ScrollView:
         """Creates a ScrollView associated with a message that already exists."""
-        embeds = ScrollViewBuilder._create_embeds(data)
+        embeds = ScrollViewBuilder._create_embeds(data, **kwargs)
         message.edit(embed=embeds[0])
         await message.add_reaction("⏪")
         await message.add_reaction("⏩")
