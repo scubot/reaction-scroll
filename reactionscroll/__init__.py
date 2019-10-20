@@ -82,9 +82,9 @@ class ScrollViewBuilder:
         self.views = []
 
     async def create_with(self, ctx: commands.Context, data: List[Mapping[Any, Any]],
-                    **kwargs) -> ScrollView:
+                          **kwargs) -> ScrollView:
         """Creates a ScrollView for the given data."""
-        embeds = ScrollViewBuilder._create_embeds(data)
+        embeds = ScrollViewBuilder._create_embeds(data, **kwargs)
         message = ctx.send(embed=embeds[0])
         await message.add_reaction("⏪")
         await message.add_reaction("⏩")
@@ -96,7 +96,7 @@ class ScrollViewBuilder:
         return view
 
     async def create_on_message(self, message, data: List[Mapping[Any, Any]],
-                          **kwargs) -> ScrollView:
+                                **kwargs) -> ScrollView:
         """Creates a ScrollView associated with a message that already exists."""
         embeds = ScrollViewBuilder._create_embeds(data, **kwargs)
         message.edit(embed=embeds[0])
@@ -115,8 +115,9 @@ class ScrollViewBuilder:
             self.bot.remove_cog(str(cog))
         self.views = []
 
-    @staticmethod
-    def _create_embeds(data: List[Mapping[Any, Any]], **kwargs) -> List[discord.Embed]:
+    def _create_embeds(self,
+                       data: List[Mapping[Any, Any]],
+                       **kwargs) -> List[discord.Embed]:
         title = kwargs.get('title', self.title)
         key_str = kwargs.get('key_str', None)
         value_str = kwargs.get('value_str', None)
@@ -132,3 +133,4 @@ class ScrollViewBuilder:
                 value = value_str(value) if value_str else str(value)
                 embed.add_field(name=key, value=value)
             embeds.append(embed)
+        return embeds
