@@ -119,8 +119,8 @@ class ScrollViewBuilder:
                        data: List[Mapping[Any, Any]],
                        **kwargs) -> List[discord.Embed]:
         title = kwargs.get('title', self.title)
-        key_str = kwargs.get('key_str', None)
-        value_str = kwargs.get('value_str', None)
+        key_str = kwargs.get('key_str', str)
+        value_str = kwargs.get('value_str', str)
 
         embeds = list()
         for page in data:
@@ -129,8 +129,8 @@ class ScrollViewBuilder:
                 color=self.color)
 
             for key, value in page.items():
-                key = key_str(key) if key_str else str(key)
-                value = value_str(value) if value_str else str(value)
+                key = key_str(key)
+                value = value_str(value)
                 embed.add_field(name=key, value=value)
             embeds.append(embed)
         return embeds
