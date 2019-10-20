@@ -8,7 +8,7 @@ python:
 # command to install dependencies
 install:
   - pip install -r requirements.txt
-  - pip install codecov pytest-cov
+  - pip install codecov pytest-cov pylint
 # command to run tests
 script:
   - pylint ./reactionscroll/ --ignore-patterns=test_.*?py
