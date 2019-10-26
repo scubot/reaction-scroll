@@ -99,7 +99,7 @@ class ScrollViewBuilder:
                                 **kwargs) -> ScrollView:
         """Creates a ScrollView associated with a message that already exists."""
         embeds = self._create_embeds(data, **kwargs)
-        message.edit(embed=embeds[0])
+        await message.edit(embed=embeds[0])
         await message.add_reaction("⏪")
         await message.add_reaction("⏩")
 
