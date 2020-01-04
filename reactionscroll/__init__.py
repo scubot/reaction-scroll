@@ -9,7 +9,7 @@ from discord.ext import commands
 
 class ScrollView(commands.Cog):
     """Self-contained ScrollView."""
-    def __init__(self, bot, message, embeds, id_: uuid.UUID):
+    def __init__(self, bot: commands.Bot, message: discord.Message, embeds, id_: uuid.UUID):
         """Construct a single self-contained embed and the reaction handlers.
 
         Args:
@@ -32,7 +32,7 @@ class ScrollView(commands.Cog):
         When a reaction is detected on the message associated with this ScrollView,
         the page is advanced or reversed accordingly.
         """
-        if reaction.message != self.message:
+        if reaction.message.id != self.message.id:
             return
 
         react_text = reaction.emoji
@@ -79,18 +79,18 @@ class ScrollViewBuilder:
         self.title = title
         self.inline = inline
         self.bot = bot
-        self.views = []
+        self.views: List[uuid.UUID] = []
 
     async def create_with(self, ctx: commands.Context, data: List[Mapping[Any, Any]],
                           **kwargs) -> ScrollView:
         """Creates a ScrollView for the given data."""
         embeds = self._create_embeds(data, **kwargs)
-        message = ctx.send(embed=embeds[0])
+        message = await ctx.send(embed=embeds[0])
         await message.add_reaction("⏪")
         await message.add_reaction("⏩")
 
         self.views.append(uuid.uuid4())
-        view = ScrollView(self.bot, embeds, message, id_=self.views[-1])
+        view = ScrollView(self.bot, message, embeds, id_=self.views[-1])
         self.bot.add_cog(view)
 
         return view
@@ -104,7 +104,7 @@ class ScrollViewBuilder:
         await message.add_reaction("⏩")
 
         self.views.append(uuid.uuid4())
-        view = ScrollView(self.bot, embeds, message, id_=self.views[-1])
+        view = ScrollView(self.bot, message, embeds, id_=self.views[-1])
         self.bot.add_cog(view)
 
         return view
